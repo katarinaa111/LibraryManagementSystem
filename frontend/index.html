@@ -1,21 +1,180 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Library Management System</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-</head>
-<body>
-  <nav class="nav nav-pills p-3 bg-light">
-    <a class="nav-link" href="#/dashboard">Dashboard</a>
-    <a class="nav-link" href="#/login">Login</a>
-    <a class="nav-link" href="#/register">Register</a>
-  </nav>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Library Management System - SPA</title>
+    <!-- Custom fonts for this template-->
+    <link
+      href="vendor/fontawesome-free/css/all.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+    <link href="css/spapp.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    />
+  </head>
+  <body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+      <!-- Sidebar -->
+      <ul
+        class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+        id="accordionSidebar"
+      >
+        <!-- Sidebar - Brand -->
+        <a
+          class="sidebar-brand d-flex align-items-center justify-content-center"
+          href="#dashboard"
+        >
+          <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-laugh-wink"></i>
+          </div>
+          <div class="sidebar-brand-text mx-3">Library SPA</div>
+        </a>
+        <hr class="sidebar-divider my-0" />
+        <li class="nav-item active">
+          <a class="nav-link" href="#dashboard">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a
+          >
+        </li>
+        <hr class="sidebar-divider" />
+        <div class="sidebar-heading">Interface</div>
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="#components" aria-expanded="true">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Components</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="#utilities" aria-expanded="true">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Utilities</span>
+          </a>
+        </li>
+        <hr class="sidebar-divider" />
+        <div class="sidebar-heading">Addons</div>
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="#pages" aria-expanded="true">
+            <i class="fas fa-fw fa-folder"></i>
+            <span>Pages</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#charts">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Charts</span></a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#tables">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Tables</span></a
+          >
+        </li>
+        <hr class="sidebar-divider d-none d-md-block" />
+        <div class="text-center d-none d-md-inline">
+          <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+      </ul>
+      <!-- End of Sidebar -->
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+          <!-- Topbar -->
+          <nav
+            class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+          >
+            <button
+              id="sidebarToggleTop"
+              class="btn btn-link d-md-none rounded-circle mr-3"
+            >
+              <i class="fa fa-bars"></i>
+            </button>
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item dropdown no-arrow">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#profile"
+                  id="userDropdown"
+                  role="button"
+                >
+                  <span class="mr-2 d-none d-lg-inline text-gray-600 small"
+                    >User</span
+                  >
+                  <img
+                    class="img-profile rounded-circle"
+                    src="assets/undraw_profile.svg"
+                  />
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <!-- End of Topbar -->
+          <!-- SPA Main Section -->
+          <main id="spapp" role="main">
+            <section id="dashboard" data-load="dashboard.html"></section>
+            <section id="components" data-load="buttons.html"></section>
+            <section id="login" data-load="login.html"></section>
+            <section id="utilities" data-load="utilities-color.html"></section>
+            <section id="pages" data-load="login.html"></section>
+            <section id="charts" data-load="charts.html"></section>
+            <section id="tables" data-load="tables.html"></section>
+            <section id="profile" data-load="blank.html"></section>
+          </main>
+        </div>
+        <!-- End of Main Content -->
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+          <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+              <span>Copyright &copy; Library SPA 2025</span>
+            </div>
+          </div>
+        </footer>
+        <!-- End of Footer -->
+      </div>
+      <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+    <!-- SPA plugin -->
+    <script src="js/jquery.spapp.js"></script>
+    <script src="js/jquery.spapp.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+      var app = $.spapp({
+        defaultView: "dashboard",
+        templateDir: "./views/",
+      });
 
-  <div class="container mt-4">
-    <div id="app"><!-- Page content will load here --></div>
-  </div>
-
-  <script src="js/main.js"></script>
-</body>
+      app.run();
+    </script>
+  </body>
 </html>
