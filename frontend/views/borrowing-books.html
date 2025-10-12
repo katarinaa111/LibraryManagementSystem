@@ -1,1 +1,48 @@
-<div></div>
+<div class="container-fluid py-3">
+  <h2 class="mb-4">📖 Borrowed Books</h2>
+
+  <!-- Issue Book Form -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white">Issue a Book</div>
+    <div class="card-body">
+      <form id="borrowForm" class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Select Book</label>
+          <select id="borrowBook" class="form-control" required>
+            <option value="">Choose book...</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Select Member</label>
+          <select id="borrowMember" class="form-control" required>
+            <option value="">Choose member...</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Due Date</label>
+          <input type="date" id="borrowDueDate" class="form-control" required />
+        </div>
+        <div class="col-md-1 d-flex align-items-end">
+          <button type="submit" class="btn btn-success w-100">Issue</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Borrowed Books Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover" id="borrowTable">
+      <thead class="table-light">
+        <tr>
+          <th>Book</th>
+          <th>Member</th>
+          <th>Issue Date</th>
+          <th>Due Date</th>
+          <th>Status</th>
+          <th style="width: 100px">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="borrowTableBody"></tbody>
+    </table>
+  </div>
+</div>

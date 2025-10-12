@@ -17,4 +17,11 @@ app.route({
   onReady: function () {},
 });
 
+app.route({
+  view: "borrowing",
+  load: "borrowing-books.html",
+  onCreate: renderBorrowedBooks,
+  onReady: function () {},
+});
+
 app.run();
