@@ -42,51 +42,46 @@
           href="#dashboard"
         >
           <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
+            <i class="fas fa-book"></i>
           </div>
           <div class="sidebar-brand-text mx-3">Library SPA</div>
         </a>
         <hr class="sidebar-divider my-0" />
         <li class="nav-item active">
           <a class="nav-link" href="#dashboard">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <i class="fas fa-fw fa-bookmark"></i>
             <span>Dashboard</span></a
           >
         </li>
         <hr class="sidebar-divider" />
-        <div class="sidebar-heading">Interface</div>
+        <div class="sidebar-heading">Library</div>
         <li class="nav-item">
-          <a class="nav-link collapsed" href="#components" aria-expanded="true">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Components</span>
+          <a class="nav-link collapsed" href="#borrowing" aria-expanded="true">
+            <i class="fas fa-fw fa-book-open"></i>
+            <span>Borrowing Books</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link collapsed" href="#utilities" aria-expanded="true">
-            <i class="fas fa-fw fa-wrench"></i>
-            <span>Utilities</span>
+          <a class="nav-link collapsed" href="#books" aria-expanded="true">
+            <i class="fas fa-fw fa-book"></i>
+            <span>Books</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link collapsed" href="#members" aria-expanded="true">
+            <i class="fas fa-fw fa-user"></i>
+            <span>Members</span>
           </a>
         </li>
         <hr class="sidebar-divider" />
-        <div class="sidebar-heading">Addons</div>
+        <div class="sidebar-heading">User</div>
         <li class="nav-item">
-          <a class="nav-link collapsed" href="#pages" aria-expanded="true">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>Pages</span>
+          <a class="nav-link collapsed" href="#settings" aria-expanded="true">
+            <i class="fas fa-fw fa-cogs"></i>
+            <span>Settings</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#charts">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span></a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#tables">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Tables</span></a
-          >
-        </li>
+
         <hr class="sidebar-divider d-none d-md-block" />
         <div class="text-center d-none d-md-inline">
           <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -374,13 +369,12 @@
           <!-- SPA Main Section -->
           <main id="spapp" role="main">
             <section id="dashboard" data-load="dashboard.html"></section>
-            <section id="components" data-load="buttons.html"></section>
+            <section id="books" data-load="books.html"></section>
+            <section id="borrowing" data-load="borrowing-books.html"></section>
+            <section id="members" data-load="members.html"></section>
+            <section id="settings" data-load="settings.html"></section>
             <section id="login" data-load="login.html"></section>
-            <section id="utilities" data-load="utilities-color.html"></section>
-            <section id="pages" data-load="login.html"></section>
-            <section id="charts" data-load="charts.html"></section>
-            <section id="tables" data-load="tables.html"></section>
-            <section id="profile" data-load="blank.html"></section>
+            <section id="register" data-load="register.html"></section>
           </main>
         </div>
         <!-- End of Main Content -->
