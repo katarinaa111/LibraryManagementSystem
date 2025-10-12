@@ -325,7 +325,7 @@
                   aria-expanded="false"
                 >
                   <span class="mr-2 d-none d-lg-inline text-gray-600 small"
-                    >Douglas McGee</span
+                    >John Doe</span
                   >
                   <img
                     class="img-profile rounded-circle"
@@ -338,16 +338,8 @@
                   aria-labelledby="userDropdown"
                 >
                   <a class="dropdown-item" href="#">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Profile
-                  </a>
-                  <a class="dropdown-item" href="#">
                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                     Settings
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Activity Log
                   </a>
                   <div class="dropdown-divider"></div>
                   <a
@@ -457,5 +449,57 @@
 
     <!-- Import main js -->
     <script src="js/main.js"></script>
+
+    <!-- Chart.js for dashboard example-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const ctx1 = document.getElementById("borrowChart").getContext("2d");
+      new Chart(ctx1, {
+        type: "line",
+        data: {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+          datasets: [
+            {
+              label: "Books Borrowed",
+              data: [50, 60, 70, 65, 90, 100],
+              backgroundColor: "rgba(78, 115, 223, 0.05)",
+              borderColor: "#4e73df",
+            },
+          ],
+        },
+      });
+
+      const ctx2 = document.getElementById("categoryChart").getContext("2d");
+      new Chart(ctx2, {
+        type: "doughnut",
+        data: {
+          labels: ["Fiction", "Science", "History"],
+          datasets: [
+            {
+              data: [55, 25, 20],
+              backgroundColor: ["#4e73df", "#1cc88a", "#36b9cc"],
+            },
+          ],
+        },
+      });
+    </script>
+    <script>
+      document
+        .getElementById("settingsForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const name = document.getElementById("fullName").value;
+          const email = document.getElementById("email").value;
+
+          alert(`✅ Settings updated for ${name} (${email})`);
+        });
+
+      document
+        .getElementById("changePhotoBtn")
+        .addEventListener("click", () => {
+          alert("Feature coming soon: upload a new profile photo!");
+        });
+    </script>
   </body>
 </html>

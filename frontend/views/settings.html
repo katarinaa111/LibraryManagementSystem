@@ -1,0 +1,121 @@
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">User Settings</h1>
+  </div>
+
+  <div class="row">
+    <!-- Profile Card -->
+    <div class="col-lg-4 mb-4">
+      <div class="card shadow mb-4 text-center">
+        <div class="card-body">
+          <img
+            src="assets/undraw_profile_1.svg"
+            class="rounded-circle mb-3"
+            width="120"
+            height="120"
+            alt="User"
+          />
+          <h5 class="mb-1" id="userName">John Doe</h5>
+          <p class="text-muted small mb-3" id="userRole">Librarian</p>
+          <button class="btn btn-primary btn-sm" id="changePhotoBtn">
+            <i class="fas fa-upload mr-1"></i> Change Photo
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Form -->
+    <div class="col-lg-8 mb-4">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Profile Information</h6>
+        </div>
+        <div class="card-body">
+          <form id="settingsForm">
+            <div class="form-group">
+              <label for="fullName">Full Name</label>
+              <input
+                type="text"
+                id="fullName"
+                class="form-control"
+                value="John Doe"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                class="form-control"
+                value="john@example.com"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="role">Role</label>
+              <select id="role" class="form-control" disabled>
+                <option>Student</option>
+                <option selected>Librarian</option>
+                <option>Admin</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="joinDate">Member Since</label>
+              <input
+                type="text"
+                id="joinDate"
+                class="form-control"
+                value="2023-05-14"
+                disabled
+              />
+            </div>
+
+            <hr />
+
+            <div class="form-group">
+              <label for="password">Change Password</label>
+              <input
+                type="password"
+                id="password"
+                class="form-control"
+                placeholder="Enter new password"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                class="form-control"
+                placeholder="Confirm new password"
+              />
+            </div>
+
+            <hr />
+
+            <div class="form-group form-check">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                id="emailNotifications"
+                checked
+              />
+              <label class="form-check-label" for="emailNotifications"
+                >Receive email notifications</label
+              >
+            </div>
+
+            <button type="submit" class="btn btn-success">
+              <i class="fas fa-save mr-1"></i> Save Changes
+            </button>
+            <button type="reset" class="btn btn-secondary ml-2">Reset</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
