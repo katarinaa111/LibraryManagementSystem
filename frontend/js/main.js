@@ -10,4 +10,11 @@ app.route({
   onReady: function () {},
 });
 
+app.route({
+  view: "members",
+  load: "members.html",
+  onCreate: renderMembers,
+  onReady: function () {},
+});
+
 app.run();
