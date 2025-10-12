@@ -450,14 +450,10 @@
     <!-- SPA plugin -->
     <script src="js/jquery.spapp.js"></script>
     <script src="js/jquery.spapp.min.js"></script>
-    <script src="js/main.js"></script>
-    <script>
-      var app = $.spapp({
-        defaultView: "dashboard",
-        templateDir: "./views/",
-      });
+    <!-- Import controllers -->
+    <script src="js/controllers/books.js"></script>
 
-      app.run();
-    </script>
+    <!-- Import main js -->
+    <script src="js/main.js"></script>
   </body>
 </html>
