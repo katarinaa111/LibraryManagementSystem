@@ -35,19 +35,18 @@ Flight::route('GET /borrowedbooks/@id', function ($id) use ($borrowedBooksServic
  *   tags={"borrowedbooks"},
  *   summary="Create borrowed record",
  *   @OA\RequestBody(required=true, content={
- *     "application/json": {
- *       "schema": {
- *         "type": "object",
- *         "properties": {
- *           "user_id": {"type": "integer"},
- *           "book_id": {"type": "integer"},
- *           "borrowed_date": {"type": "string", "format": "date"},
- *           "supposed_return_date": {"type": "string", "format": "date"},
- *           "returned_date": {"type": "string", "format": "date"}
- *         },
- *         "required": {"user_id", "book_id", "borrowed_date", "supposed_return_date"}
- *       }
- *     }
+ *     @OA\MediaType(
+ *       mediaType="application/json",
+ *       @OA\Schema(
+ *         type="object",
+ *         required={"user_id","book_id","borrowed_date","supposed_return_date"},
+ *         @OA\Property(property="user_id", type="integer"),
+ *         @OA\Property(property="book_id", type="integer"),
+ *         @OA\Property(property="borrowed_date", type="string", format="date"),
+ *         @OA\Property(property="supposed_return_date", type="string", format="date"),
+ *         @OA\Property(property="returned_date", type="string", format="date")
+ *       )
+ *     )
  *   }),
  *   @OA\Response(response=201, description="Created")
  * )
@@ -68,19 +67,18 @@ Flight::route('POST /borrowedbooks', function () use ($borrowedBooksService) {
  *   summary="Update borrowed record",
  *   @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
  *   @OA\RequestBody(required=true, content={
- *     "application/json": {
- *       "schema": {
- *         "type": "object",
- *         "properties": {
- *           "user_id": {"type": "integer"},
- *           "book_id": {"type": "integer"},
- *           "borrowed_date": {"type": "string", "format": "date"},
- *           "supposed_return_date": {"type": "string", "format": "date"},
- *           "returned_date": {"type": "string", "format": "date"}
- *         },
- *         "required": {"user_id", "book_id", "borrowed_date", "supposed_return_date"}
- *       }
- *     }
+ *     @OA\MediaType(
+ *       mediaType="application/json",
+ *       @OA\Schema(
+ *         type="object",
+ *         required={"user_id","book_id","borrowed_date","supposed_return_date"},
+ *         @OA\Property(property="user_id", type="integer"),
+ *         @OA\Property(property="book_id", type="integer"),
+ *         @OA\Property(property="borrowed_date", type="string", format="date"),
+ *         @OA\Property(property="supposed_return_date", type="string", format="date"),
+ *         @OA\Property(property="returned_date", type="string", format="date")
+ *       )
+ *     )
  *   }),
  *   @OA\Response(response=200, description="OK")
  * )

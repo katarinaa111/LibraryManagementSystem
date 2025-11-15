@@ -35,13 +35,14 @@ Flight::route('GET /authors/@id', function ($id) use ($authorsService) {
  *   tags={"authors"},
  *   summary="Create author",
  *   @OA\RequestBody(required=true, content={
- *     "application/json": {
- *       "schema": {
- *         "type": "object",
- *         "properties": {"name": {"type": "string"}},
- *         "required": {"name"}
- *       }
- *     }
+ *     @OA\MediaType(
+ *       mediaType="application/json",
+ *       @OA\Schema(
+ *         type="object",
+ *         required={"name"},
+ *         @OA\Property(property="name", type="string")
+ *       )
+ *     )
  *   }),
  *   @OA\Response(response=201, description="Created")
  * )
@@ -62,13 +63,14 @@ Flight::route('POST /authors', function () use ($authorsService) {
  *   summary="Update author",
  *   @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
  *   @OA\RequestBody(required=true, content={
- *     "application/json": {
- *       "schema": {
- *         "type": "object",
- *         "properties": {"name": {"type": "string"}},
- *         "required": {"name"}
- *       }
- *     }
+ *     @OA\MediaType(
+ *       mediaType="application/json",
+ *       @OA\Schema(
+ *         type="object",
+ *         required={"name"},
+ *         @OA\Property(property="name", type="string")
+ *       )
+ *     )
  *   }),
  *   @OA\Response(response=200, description="OK")
  * )

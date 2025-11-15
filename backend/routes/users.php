@@ -35,17 +35,16 @@ Flight::route('GET /users/@id', function ($id) use ($usersService) {
  *   tags={"users"},
  *   summary="Create user",
  *   @OA\RequestBody(required=true, content={
- *     "application/json": {
- *       "schema": {
- *         "type": "object",
- *         "properties": {
- *           "username": {"type": "string"},
- *           "email": {"type": "string", "format": "email"},
- *           "role": {"type": "string"}
- *         },
- *         "required": {"username", "email", "role"}
- *       }
- *     }
+ *     @OA\MediaType(
+ *       mediaType="application/json",
+ *       @OA\Schema(
+ *         type="object",
+ *         required={"username","email","role"},
+ *         @OA\Property(property="username", type="string"),
+ *         @OA\Property(property="email", type="string", format="email"),
+ *         @OA\Property(property="role", type="string")
+ *       )
+ *     )
  *   }),
  *   @OA\Response(response=201, description="Created")
  * )
@@ -66,17 +65,16 @@ Flight::route('POST /users', function () use ($usersService) {
  *   summary="Update user",
  *   @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
  *   @OA\RequestBody(required=true, content={
- *     "application/json": {
- *       "schema": {
- *         "type": "object",
- *         "properties": {
- *           "username": {"type": "string"},
- *           "email": {"type": "string", "format": "email"},
- *           "role": {"type": "string"}
- *         },
- *         "required": {"username", "email", "role"}
- *       }
- *     }
+ *     @OA\MediaType(
+ *       mediaType="application/json",
+ *       @OA\Schema(
+ *         type="object",
+ *         required={"username","email","role"},
+ *         @OA\Property(property="username", type="string"),
+ *         @OA\Property(property="email", type="string", format="email"),
+ *         @OA\Property(property="role", type="string")
+ *       )
+ *     )
  *   }),
  *   @OA\Response(response=200, description="OK")
  * )

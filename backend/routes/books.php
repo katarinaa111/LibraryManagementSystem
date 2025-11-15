@@ -35,17 +35,16 @@ Flight::route('GET /books/@id', function ($id) use ($booksService) {
  *   tags={"books"},
  *   summary="Create book",
  *   @OA\RequestBody(required=true, content={
- *     "application/json": {
- *       "schema": {
- *         "type": "object",
- *         "properties": {
- *           "title": {"type": "string"},
- *           "author_id": {"type": "integer"},
- *           "category_id": {"type": "integer"}
- *         },
- *         "required": {"title", "author_id", "category_id"}
- *       }
- *     }
+ *     @OA\MediaType(
+ *       mediaType="application/json",
+ *       @OA\Schema(
+ *         type="object",
+ *         required={"title","author_id","category_id"},
+ *         @OA\Property(property="title", type="string"),
+ *         @OA\Property(property="author_id", type="integer"),
+ *         @OA\Property(property="category_id", type="integer")
+ *       )
+ *     )
  *   }),
  *   @OA\Response(response=201, description="Created")
  * )
@@ -66,17 +65,16 @@ Flight::route('POST /books', function () use ($booksService) {
  *   summary="Update book",
  *   @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
  *   @OA\RequestBody(required=true, content={
- *     "application/json": {
- *       "schema": {
- *         "type": "object",
- *         "properties": {
- *           "title": {"type": "string"},
- *           "author_id": {"type": "integer"},
- *           "category_id": {"type": "integer"}
- *         },
- *         "required": {"title", "author_id", "category_id"}
- *       }
- *     }
+ *     @OA\MediaType(
+ *       mediaType="application/json",
+ *       @OA\Schema(
+ *         type="object",
+ *         required={"title","author_id","category_id"},
+ *         @OA\Property(property="title", type="string"),
+ *         @OA\Property(property="author_id", type="integer"),
+ *         @OA\Property(property="category_id", type="integer")
+ *       )
+ *     )
  *   }),
  *   @OA\Response(response=200, description="OK")
  * )
