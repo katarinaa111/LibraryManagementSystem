@@ -12,7 +12,7 @@
  */
 /**
  * @OA\Server(
- *     url= "http://localhost/LibraryManagementSystem/backend",
+ *     url= "http://localhost/KatarinaSoja/LibraryManagementSystem/backend",
  *     description="API server"
  * )
  */
