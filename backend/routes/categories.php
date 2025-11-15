@@ -44,13 +44,13 @@ Flight::route('GET /categories/@id', function ($id) use ($categoriesService) {
  *       )
  *     )
  *   }),
- *   @OA\Response(response=201, description="Created")
+ *   @OA\Response(response=200, description="Created")
  * )
  */
 Flight::route('POST /categories', function () use ($categoriesService) {
     $data = json_decode(Flight::request()->getBody(), true);
     try {
-        Flight::json($categoriesService->add($data), 201);
+        Flight::json($categoriesService->add($data), 200);
     } catch (Throwable $e) {
         Flight::json(['error' => $e->getMessage()], 400);
     }

@@ -46,13 +46,13 @@ Flight::route('GET /users/@id', function ($id) use ($usersService) {
  *       )
  *     )
  *   }),
- *   @OA\Response(response=201, description="Created")
+ *   @OA\Response(response=200, description="Created")
  * )
  */
 Flight::route('POST /users', function () use ($usersService) {
     $data = json_decode(Flight::request()->getBody(), true);
     try {
-        Flight::json($usersService->add($data), 201);
+        Flight::json($usersService->add($data), 200);
     } catch (Throwable $e) {
         Flight::json(['error' => $e->getMessage()], 400);
     }

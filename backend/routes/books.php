@@ -42,17 +42,19 @@ Flight::route('GET /books/@id', function ($id) use ($booksService) {
  *         required={"title","author_id","category_id"},
  *         @OA\Property(property="title", type="string"),
  *         @OA\Property(property="author_id", type="integer"),
- *         @OA\Property(property="category_id", type="integer")
+ *         @OA\Property(property="category_id", type="integer"),
+ *         @OA\Property(property="published_date", type="string", format="date"),
+ *         @OA\Property(property="summary", type="string")
  *       )
  *     )
  *   }),
- *   @OA\Response(response=201, description="Created")
+ *   @OA\Response(response=200, description="Created")
  * )
  */
 Flight::route('POST /books', function () use ($booksService) {
     $data = json_decode(Flight::request()->getBody(), true);
     try {
-        Flight::json($booksService->add($data), 201);
+        Flight::json($booksService->add($data), 200);
     } catch (Throwable $e) {
         Flight::json(['error' => $e->getMessage()], 400);
     }

@@ -44,6 +44,7 @@ class BooksService extends BaseService
     public function add($entity)
     {
         $this->validate($entity);
+        $entity['created_at'] = date('Y-m-d');
         return parent::add($entity);
     }
 

@@ -48,13 +48,13 @@ Flight::route('GET /borrowedbooks/@id', function ($id) use ($borrowedBooksServic
  *       )
  *     )
  *   }),
- *   @OA\Response(response=201, description="Created")
+ *   @OA\Response(response=200, description="Created")
  * )
  */
 Flight::route('POST /borrowedbooks', function () use ($borrowedBooksService) {
     $data = json_decode(Flight::request()->getBody(), true);
     try {
-        Flight::json($borrowedBooksService->add($data), 201);
+        Flight::json($borrowedBooksService->add($data), 200);
     } catch (Throwable $e) {
         Flight::json(['error' => $e->getMessage()], 400);
     }

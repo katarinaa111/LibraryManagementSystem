@@ -40,17 +40,18 @@ Flight::route('GET /authors/@id', function ($id) use ($authorsService) {
  *       @OA\Schema(
  *         type="object",
  *         required={"name"},
- *         @OA\Property(property="name", type="string")
+ *         @OA\Property(property="name", type="string"),
+ *         @OA\Property(property="bio", type="string")
  *       )
  *     )
  *   }),
- *   @OA\Response(response=201, description="Created")
+ *   @OA\Response(response=200, description="Created")
  * )
  */
 Flight::route('POST /authors', function () use ($authorsService) {
     $data = json_decode(Flight::request()->getBody(), true);
     try {
-        Flight::json($authorsService->add($data), 201);
+        Flight::json($authorsService->add($data), 200);
     } catch (Throwable $e) {
         Flight::json(['error' => $e->getMessage()], 400);
     }
@@ -68,7 +69,8 @@ Flight::route('POST /authors', function () use ($authorsService) {
  *       @OA\Schema(
  *         type="object",
  *         required={"name"},
- *         @OA\Property(property="name", type="string")
+ *         @OA\Property(property="name", type="string"),
+ *         @OA\Property(property="bio", type="string")
  *       )
  *     )
  *   }),
@@ -107,7 +109,7 @@ Flight::route('DELETE /authors/@id', function ($id) use ($authorsService) {
  * )
  */
 Flight::route('GET /authors/search', function () use ($authorsService) {
-    $name = Flight::request()->query->name;
+    $name = Flight::request()->query->getData()['name'];
     Flight::json($authorsService->get_author_by_name($name));
 });
 
