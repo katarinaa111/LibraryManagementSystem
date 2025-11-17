@@ -50,6 +50,14 @@ class BaseDao
         $stmt->execute();
         return $stmt->fetch();
     }
+    public function get_all()
+    {
+        return $this->getAll();
+    }
+    public function get_by_id($id)
+    {
+        return $this->getById($id);
+    }
     public function add($entity)
     {
         $query = "INSERT INTO " . $this->table_name . " (";

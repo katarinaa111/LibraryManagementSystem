@@ -1,2 +1,3 @@
-# frontend/vendor
+vendor
+/backend/vendor
 /backend/config.php
