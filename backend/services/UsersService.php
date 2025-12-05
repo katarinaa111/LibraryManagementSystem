@@ -22,7 +22,7 @@ class UsersService extends BaseService
 
     private function validate($entity, $is_update = false)
     {
-        $roles = ['admin', 'librarian', 'member'];
+        $roles = ['admin', 'member'];
         if (!isset($entity['username']) || trim($entity['username']) === '') {
             throw new InvalidArgumentException('username is required');
         }

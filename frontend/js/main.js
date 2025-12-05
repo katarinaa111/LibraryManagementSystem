@@ -3,24 +3,37 @@ var app = $.spapp({
   templateDir: "./views/",
 });
 
+function guard() {
+  return Auth.requireAuth();
+}
+
 app.route({
   view: "books",
   load: "books.html",
-  onCreate: renderBooks,
+  onCreate: function () {
+    if (!guard()) return;
+    renderBooks();
+  },
   onReady: function () {},
 });
 
 app.route({
   view: "members",
   load: "members.html",
-  onCreate: renderMembers,
+  onCreate: function () {
+    if (!guard()) return;
+    renderMembers();
+  },
   onReady: function () {},
 });
 
 app.route({
   view: "borrowing",
   load: "borrowing-books.html",
-  onCreate: renderBorrowedBooks,
+  onCreate: function () {
+    if (!guard()) return;
+    renderBorrowedBooks();
+  },
   onReady: function () {},
 });
 

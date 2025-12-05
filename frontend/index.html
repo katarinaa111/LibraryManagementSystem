@@ -40,6 +40,7 @@
         <a
           class="sidebar-brand d-flex align-items-center justify-content-center"
           href="#dashboard"
+          id="menuDashboard"
         >
           <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-book"></i>
@@ -47,7 +48,7 @@
           <div class="sidebar-brand-text mx-3">Library SPA</div>
         </a>
         <hr class="sidebar-divider my-0" />
-        <li class="nav-item active">
+        <li class="nav-item active" id="menuDashboardItem">
           <a class="nav-link" href="#dashboard">
             <i class="fas fa-fw fa-bookmark"></i>
             <span>Dashboard</span></a
@@ -55,19 +56,19 @@
         </li>
         <hr class="sidebar-divider" />
         <div class="sidebar-heading">Library</div>
-        <li class="nav-item">
+        <li class="nav-item" id="menuBorrowing">
           <a class="nav-link collapsed" href="#borrowing" aria-expanded="true">
             <i class="fas fa-fw fa-book-open"></i>
             <span>Borrowing Books</span>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" id="menuBooks">
           <a class="nav-link collapsed" href="#books" aria-expanded="true">
             <i class="fas fa-fw fa-book"></i>
             <span>Books</span>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" id="menuMembers">
           <a class="nav-link collapsed" href="#members" aria-expanded="true">
             <i class="fas fa-fw fa-user"></i>
             <span>Members</span>
@@ -75,7 +76,7 @@
         </li>
         <hr class="sidebar-divider" />
         <div class="sidebar-heading">User</div>
-        <li class="nav-item">
+        <li class="nav-item" id="menuSettings">
           <a class="nav-link collapsed" href="#settings" aria-expanded="true">
             <i class="fas fa-fw fa-cogs"></i>
             <span>Settings</span>
@@ -262,8 +263,7 @@
             <section id="borrowing" data-load="borrowing-books.html"></section>
             <section id="members" data-load="members.html"></section>
             <section id="settings" data-load="settings.html"></section>
-            <section id="login" data-load="login.html"></section>
-            <section id="register" data-load="register.html"></section>
+            
           </main>
         </div>
         <!-- End of Main Content -->
@@ -321,7 +321,7 @@
               class="btn btn-primary"
               type="button"
               data-dismiss="modal"
-              onclick="location.hash='#login'"
+              onclick="Auth.logout()"
             >
               Logout
             </button>
@@ -339,6 +339,14 @@
     <!-- SPA plugin -->
     <script src="js/jquery.spapp.js"></script>
     <script src="js/jquery.spapp.min.js"></script>
+    <!-- Utils and API helper -->
+    <script src="utils/constants.js"></script>
+    <script src="utils/utils.js"></script>
+    <script src="utils/rest-client.js"></script>
+    <!-- Auth utilities -->
+    <script src="js/auth.js"></script>
+    <script src="js/menu.js"></script>
+    <script src="js/bootstrap.js"></script>
     <!-- Import controllers -->
     <script src="js/controllers/books.js"></script>
     <script src="js/controllers/members.js"></script>

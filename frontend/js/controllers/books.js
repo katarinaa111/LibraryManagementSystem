@@ -1,58 +1,53 @@
 function renderBooks() {
-  let books = [
-    {
-      id: 1,
-      title: "1984",
-      author: "George Orwell",
-      category: "Fiction",
-      status: "Available",
-    },
-    {
-      id: 2,
-      title: "A Brief History of Time",
-      author: "Stephen Hawking",
-      category: "Science",
-      status: "Borrowed",
-    },
-  ];
+  if (!Auth.requireAuth()) return;
 
-  const renderBooks = (list) => {
+  let booksCache = [];
+
+  const renderTable = (list) => {
     let rows = "";
     list.forEach((b) => {
       rows += `
         <tr>
           <td>${b.title}</td>
-          <td>${b.author}</td>
-          <td>${b.category}</td>
-          <td>${b.status}</td>
+          <td>${b.author?.name || b.author_name || ""}</td>
+          <td>${b.category?.name || b.category_name || ""}</td>
+          <td>${b.status || ""}</td>
           <td>
-            <button class="btn btn-sm btn-warning editBook" data-id="${b.id}">Edit</button>
-            <button class="btn btn-sm btn-danger deleteBook" data-id="${b.id}">Delete</button>
+            <button class="btn btn-sm btn-warning editBook" data-id="${
+              b.id
+            }">Edit</button>
+            <button class="btn btn-sm btn-danger deleteBook" data-id="${
+              b.id
+            }">Delete</button>
           </td>
         </tr>`;
     });
     $("#booksTableBody").html(rows);
   };
 
-  const filterBooks = () => {
-    let query = $("#searchBook").val().toLowerCase();
-    let category = $("#filterCategory").val();
-    let filtered = books.filter(
-      (b) =>
-        (b.title.toLowerCase().includes(query) ||
-          b.author.toLowerCase().includes(query)) &&
-        (category === "" || b.category === category)
-    );
-    renderBooks(filtered);
+  const loadBooks = () => {
+    RestClient.get("/books", function (response) {
+      booksCache = response;
+      renderTable(response);
+    });
   };
 
-  // Initial render
-  renderBooks(books);
+  const filterBooks = () => {
+    const query = $("#searchBook").val().toLowerCase();
+    const category = $("#filterCategory").val();
+    const filtered = booksCache.filter((b) => {
+      const title = (b.title || "").toLowerCase();
+      const author = (b.author?.name || b.author_name || "").toLowerCase();
+      const cat = b.category?.name || b.category_name || "";
+      const matchesText = title.includes(query) || author.includes(query);
+      const matchesCat = category === "" || cat === category;
+      return matchesText && matchesCat;
+    });
+    renderTable(filtered);
+  };
 
-  // Event: Search & Filter
   $("#searchBook, #filterCategory").on("input change", filterBooks);
 
-  // Event: Add book button
   $("#addBookBtn").click(function () {
     $("#bookId").val("");
     $("#bookForm")[0].reset();
@@ -60,49 +55,64 @@ function renderBooks() {
     $("#bookModal").modal("show");
   });
 
-  // Event: Edit book
   $(document).on("click", ".editBook", function () {
-    let id = $(this).data("id");
-    let b = books.find((x) => x.id == id);
+    const id = $(this).data("id");
+    const b = booksCache.find((x) => x.id == id);
+    if (!b) return;
     $("#bookId").val(b.id);
     $("#bookTitle").val(b.title);
-    $("#bookAuthor").val(b.author);
-    $("#bookCategory").val(b.category);
-    $("#bookStatus").val(b.status);
+    $("#bookAuthorId").val(b.author_id || b.author?.id || "");
+    $("#bookCategoryId").val(b.category_id || b.category?.id || "");
+    $("#bookStatus").val(b.status || "Available");
     $("#bookModalLabel").text("Edit Book");
     $("#bookModal").modal("show");
   });
 
-  // Event: Delete book
   $(document).on("click", ".deleteBook", function () {
-    if (confirm("Are you sure you want to delete this book?")) {
-      let id = $(this).data("id");
-      books = books.filter((b) => b.id != id);
-      filterBooks();
-    }
+    if (!confirm("Are you sure you want to delete this book?")) return;
+    const id = $(this).data("id");
+    RestClient.delete(`/books/${id}`, null, function () {
+      loadBooks();
+    });
   });
 
-  // Event: Save book
+  const loadSelectors = () => {
+    RestClient.get("/authors", function (authors) {
+      const $sel = $("#bookAuthorId");
+      $sel.html('<option value="">Select author...</option>');
+      authors.forEach((a) =>
+        $sel.append(`<option value="${a.id}">${a.name}</option>`)
+      );
+    });
+    RestClient.get("/categories", function (categories) {
+      const $sel = $("#bookCategoryId");
+      $sel.html('<option value="">Select category...</option>');
+      categories.forEach((c) =>
+        $sel.append(`<option value="${c.id}">${c.name}</option>`)
+      );
+    });
+  };
+
   $("#bookForm").submit(function (e) {
     e.preventDefault();
-    let id = $("#bookId").val();
-    let newBook = {
-      id: id ? parseInt(id) : Date.now(),
-      title: $("#bookTitle").val(),
-      author: $("#bookAuthor").val(),
-      category: $("#bookCategory").val(),
-      status: $("#bookStatus").val(),
-    };
-
+    const id = $("#bookId").val();
+    const title = $("#bookTitle").val();
+    const author_id = parseInt($("#bookAuthorId").val());
+    const category_id = parseInt($("#bookCategoryId").val());
+    const payload = { title, author_id, category_id };
     if (id) {
-      // Update existing
-      books = books.map((b) => (b.id == id ? newBook : b));
+      RestClient.put(`/books/${id}`, payload, function () {
+        $("#bookModal").modal("hide");
+        loadBooks();
+      });
     } else {
-      // Add new
-      books.push(newBook);
+      RestClient.post(`/books`, payload, function () {
+        $("#bookModal").modal("hide");
+        loadBooks();
+      });
     }
-
-    $("#bookModal").modal("hide");
-    filterBooks();
   });
+
+  loadBooks();
+  loadSelectors();
 }
