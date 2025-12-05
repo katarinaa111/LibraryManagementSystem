@@ -1,5 +1,6 @@
 {
     "require": {
-        "mikecao/flight": "^3.17"
+        "mikecao/flight": "^3.17",
+        "firebase/php-jwt": "^6.11"
     }
 }
