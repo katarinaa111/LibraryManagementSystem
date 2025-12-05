@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../services/CategoriesService.php';
+require_once __DIR__ . '/../data/Roles.php';
 
 $categoriesService = new CategoriesService();
 
@@ -13,6 +14,7 @@ $categoriesService = new CategoriesService();
  * )
  */
 Flight::route('GET /categories', function () use ($categoriesService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($categoriesService->get_all());
 });
 
@@ -26,6 +28,7 @@ Flight::route('GET /categories', function () use ($categoriesService) {
  * )
  */
 Flight::route('GET /categories/@id', function ($id) use ($categoriesService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($categoriesService->get_by_id($id));
 });
 
@@ -48,6 +51,7 @@ Flight::route('GET /categories/@id', function ($id) use ($categoriesService) {
  * )
  */
 Flight::route('POST /categories', function () use ($categoriesService) {
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = json_decode(Flight::request()->getBody(), true);
     try {
         Flight::json($categoriesService->add($data), 200);
@@ -76,6 +80,7 @@ Flight::route('POST /categories', function () use ($categoriesService) {
  * )
  */
 Flight::route('PUT /categories/@id', function ($id) use ($categoriesService) {
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = json_decode(Flight::request()->getBody(), true);
     try {
         Flight::json($categoriesService->update($data, $id));
@@ -94,6 +99,7 @@ Flight::route('PUT /categories/@id', function ($id) use ($categoriesService) {
  * )
  */
 Flight::route('DELETE /categories/@id', function ($id) use ($categoriesService) {
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(['success' => $categoriesService->delete($id)]);
 });
 
@@ -107,6 +113,7 @@ Flight::route('DELETE /categories/@id', function ($id) use ($categoriesService) 
  * )
  */
 Flight::route('GET /categories/search', function () use ($categoriesService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     $name = Flight::request()->query->name;
     Flight::json($categoriesService->get_category_by_name($name));
 });

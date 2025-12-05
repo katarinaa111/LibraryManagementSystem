@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../services/BorrowedBooksService.php';
+require_once __DIR__ . '/../data/Roles.php';
 
 $borrowedBooksService = new BorrowedBooksService();
 
@@ -13,6 +14,7 @@ $borrowedBooksService = new BorrowedBooksService();
  * )
  */
 Flight::route('GET /borrowedbooks', function () use ($borrowedBooksService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($borrowedBooksService->get_all());
 });
 
@@ -26,6 +28,7 @@ Flight::route('GET /borrowedbooks', function () use ($borrowedBooksService) {
  * )
  */
 Flight::route('GET /borrowedbooks/@id', function ($id) use ($borrowedBooksService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($borrowedBooksService->get_by_id($id));
 });
 
@@ -52,6 +55,7 @@ Flight::route('GET /borrowedbooks/@id', function ($id) use ($borrowedBooksServic
  * )
  */
 Flight::route('POST /borrowedbooks', function () use ($borrowedBooksService) {
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = json_decode(Flight::request()->getBody(), true);
     try {
         Flight::json($borrowedBooksService->add($data), 200);
@@ -84,6 +88,7 @@ Flight::route('POST /borrowedbooks', function () use ($borrowedBooksService) {
  * )
  */
 Flight::route('PUT /borrowedbooks/@id', function ($id) use ($borrowedBooksService) {
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = json_decode(Flight::request()->getBody(), true);
     try {
         Flight::json($borrowedBooksService->update($data, $id));
@@ -102,6 +107,7 @@ Flight::route('PUT /borrowedbooks/@id', function ($id) use ($borrowedBooksServic
  * )
  */
 Flight::route('DELETE /borrowedbooks/@id', function ($id) use ($borrowedBooksService) {
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(['success' => $borrowedBooksService->delete($id)]);
 });
 
@@ -115,6 +121,7 @@ Flight::route('DELETE /borrowedbooks/@id', function ($id) use ($borrowedBooksSer
  * )
  */
 Flight::route('GET /borrowedbooks/by-user/@user_id', function ($user_id) use ($borrowedBooksService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($borrowedBooksService->get_borrowed_by_user_id($user_id));
 });
 
@@ -128,6 +135,7 @@ Flight::route('GET /borrowedbooks/by-user/@user_id', function ($user_id) use ($b
  * )
  */
 Flight::route('GET /borrowedbooks/by-book/@book_id', function ($book_id) use ($borrowedBooksService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($borrowedBooksService->get_borrowed_by_book_id($book_id));
 });
 
