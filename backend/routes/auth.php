@@ -1,8 +1,5 @@
 <?php
 
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-
 Flight::group('/auth', function () {
 
     /**
@@ -11,9 +8,7 @@ Flight::group('/auth', function () {
      *     summary="Register new user.",
      *     description="Add a new user to the database.",
      *     tags={"auth"},
-     *     security={
-     *         {"ApiKey": {}}
-     *     },
+     *     security={},
      *     @OA\RequestBody(
      *         description="Add new user",
      *         required=true,
@@ -46,10 +41,10 @@ Flight::group('/auth', function () {
      *     )
      * )
      */
-    Flight::route("POST /auth/register", function () {
+    Flight::route('POST /register', function () {
         $data = Flight::request()->data->getData();
 
-        $response = Flight::auth_service()->register($data);
+        $response = Flight::authService()->register($data);
 
         if ($response['success']) {
             Flight::json([
@@ -66,6 +61,7 @@ Flight::group('/auth', function () {
      *      path="/auth/login",
      *      tags={"auth"},
      *      summary="Login to system using email and password",
+     *      security={},
      *      @OA\Response(
      *           response=200,
      *           description="Student data and JWT"
@@ -83,7 +79,7 @@ Flight::group('/auth', function () {
     Flight::route('POST /login', function () {
         $data = Flight::request()->data->getData();
 
-        $response = Flight::auth_service()->login($data);
+        $response = Flight::authService()->login($data);
 
         if ($response['success']) {
             Flight::json([

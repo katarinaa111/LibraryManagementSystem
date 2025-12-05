@@ -1,8 +1,6 @@
 <?php
 require_once 'BaseService.php';
 require_once __DIR__ . '/../dao/AuthDao.php';
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 
 class AuthService extends BaseService
 {
@@ -59,16 +57,28 @@ class AuthService extends BaseService
         $jwt_payload = [
             'user' => $user,
             'iat' => time(),
-            // If this parameter is not set, JWT will be valid for life. This is not a good approach
-            'exp' => time() + (60 * 60 * 24) // valid for day
+            'exp' => time() + (60 * 60 * 24)
         ];
 
-        $token = JWT::encode(
-            $jwt_payload,
-            Config::JWT_SECRET(),
-            'HS256'
-        );
+        $token = $this->encodeJwt($jwt_payload, Config::JWT_SECRET());
 
         return ['success' => true, 'data' => array_merge($user, ['token' => $token])];
+    }
+
+    private function base64url_encode($data)
+    {
+        return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+    }
+
+    private function encodeJwt($payload, $secret)
+    {
+        $header = ['alg' => 'HS256', 'typ' => 'JWT'];
+        $segments = [];
+        $segments[] = $this->base64url_encode(json_encode($header));
+        $segments[] = $this->base64url_encode(json_encode($payload));
+        $signing_input = implode('.', $segments);
+        $signature = hash_hmac('sha256', $signing_input, $secret, true);
+        $segments[] = $this->base64url_encode($signature);
+        return implode('.', $segments);
     }
 }

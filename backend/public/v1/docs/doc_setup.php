@@ -17,10 +17,17 @@
  * )
  */
 /**
- * @OA\SecurityScheme(
- *     securityScheme="ApiKey",
- *     type="apiKey",
- *     in="header",
- *     name="Authentication"
+ * @OA\Components(
+ *     @OA\SecurityScheme(
+ *         securityScheme="ApiKey",
+ *         type="apiKey",
+ *         in="header",
+ *         name="Authentication"
+ *     )
+ * )
+ */
+/**
+ * @OA\OpenApi(
+ *     security={{"ApiKey": {}}}
  * )
  */
