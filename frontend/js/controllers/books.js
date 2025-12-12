@@ -2,6 +2,8 @@ function renderBooks() {
   if (!Auth.requireAuth()) return;
 
   let booksCache = [];
+  const currentUser = Auth.currentUser() || {};
+  const isAdmin = (currentUser.role || "").toLowerCase() === "admin";
 
   const renderTable = (list) => {
     let rows = "";
@@ -13,12 +15,12 @@ function renderBooks() {
           <td>${b.category?.name || b.category_name || ""}</td>
           <td>${b.status || ""}</td>
           <td>
-            <button class="btn btn-sm btn-warning editBook" data-id="${
-              b.id
-            }">Edit</button>
-            <button class="btn btn-sm btn-danger deleteBook" data-id="${
-              b.id
-            }">Delete</button>
+            ${
+              isAdmin
+                ? `<button class="btn btn-sm btn-warning editBook" data-id="${b.id}">Edit</button>
+            <button class="btn btn-sm btn-danger deleteBook" data-id="${b.id}">Delete</button>`
+                : ``
+            }
           </td>
         </tr>`;
     });
@@ -49,6 +51,7 @@ function renderBooks() {
   $("#searchBook, #filterCategory").on("input change", filterBooks);
 
   $("#addBookBtn").click(function () {
+    if (!isAdmin) return;
     $("#bookId").val("");
     $("#bookForm")[0].reset();
     $("#bookModalLabel").text("Add Book");
@@ -115,4 +118,11 @@ function renderBooks() {
 
   loadBooks();
   loadSelectors();
+
+  if (!isAdmin) {
+    try {
+      $("#addBookBtn").hide();
+      $("#booksTable thead th:last").hide();
+    } catch (e) {}
+  }
 }

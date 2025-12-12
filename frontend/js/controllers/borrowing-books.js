@@ -4,6 +4,8 @@ function renderBorrowedBooks() {
   let booksCache = [];
   let usersCache = [];
   let recordsCache = [];
+  const currentUser = Auth.currentUser() || {};
+  const isAdmin = (currentUser.role || "").toLowerCase() === "admin";
 
   const loadSelectOptions = () => {
     $("#borrowBook").html('<option value="">Choose book...</option>');
@@ -13,15 +15,19 @@ function renderBorrowedBooks() {
 
     $("#borrowMember").html('<option value="">Choose member...</option>');
     usersCache.forEach((u) => {
-      $("#borrowMember").append(`<option value="${u.id}">${u.username || u.name}</option>`);
+      $("#borrowMember").append(
+        `<option value="${u.id}">${u.username || u.name}</option>`
+      );
     });
   };
 
   const renderTable = () => {
     let rows = "";
     recordsCache.forEach((r) => {
-      const book = booksCache.find((b) => b.id == r.book_id)?.title || "Unknown";
-      const member = usersCache.find((u) => u.id == r.user_id)?.username || "Unknown";
+      const book =
+        booksCache.find((b) => b.id == r.book_id)?.title || "Unknown";
+      const member =
+        usersCache.find((u) => u.id == r.user_id)?.username || "Unknown";
       const status = r.returned_date ? "Returned" : "Borrowed";
       rows += `
         <tr>
@@ -30,12 +36,16 @@ function renderBorrowedBooks() {
           <td>${r.borrowed_date || ""}</td>
           <td>${r.supposed_return_date || ""}</td>
           <td>
-            <span class="badge ${status === "Returned" ? "bg-success" : "bg-warning text-dark"}">${status}</span>
+            <span class="badge ${
+              status === "Returned" ? "bg-success" : "bg-warning text-dark"
+            }">${status}</span>
           </td>
           <td>
             ${
               !r.returned_date
-                ? `<button class="btn btn-sm btn-success markReturned" data-id="${r.id}">Return</button>`
+                ? isAdmin
+                  ? `<button class="btn btn-sm btn-success markReturned" data-id="${r.id}">Return</button>`
+                  : ``
                 : `<span class="text-muted">Done</span>`
             }
           </td>
@@ -60,6 +70,10 @@ function renderBorrowedBooks() {
 
   $("#borrowForm").submit(function (e) {
     e.preventDefault();
+    if (!isAdmin) {
+      alert("Not authorized");
+      return;
+    }
     const bookId = parseInt($("#borrowBook").val());
     const memberId = parseInt($("#borrowMember").val());
     const dueDate = $("#borrowDueDate").val();
@@ -83,6 +97,10 @@ function renderBorrowedBooks() {
   });
 
   $(document).on("click", ".markReturned", function () {
+    if (!isAdmin) {
+      alert("Not authorized");
+      return;
+    }
     const id = $(this).data("id");
     const payload = { returned_date: new Date().toISOString().split("T")[0] };
     RestClient.put(`/borrowedbooks/${id}`, payload, function () {
@@ -91,4 +109,10 @@ function renderBorrowedBooks() {
   });
 
   loadAll();
+  if (!isAdmin) {
+    try {
+      $("#borrowForm").closest(".card").hide();
+      $("#borrowTable thead th:last").hide();
+    } catch (e) {}
+  }
 }
