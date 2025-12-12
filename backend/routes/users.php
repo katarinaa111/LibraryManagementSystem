@@ -111,7 +111,7 @@ Flight::route('POST /users', function () use ($usersService) {
  * )
  */
 Flight::route('PUT /users/@id', function ($id) use ($usersService) {
-    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     $data = json_decode(Flight::request()->getBody(), true);
     try {
         Flight::json($usersService->update($data, $id));
