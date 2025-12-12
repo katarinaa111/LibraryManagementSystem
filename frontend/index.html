@@ -225,9 +225,7 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  <span class="mr-2 d-none d-lg-inline text-gray-600 small"
-                    >John Doe</span
-                  >
+                  <span id="topbarUserName" class="mr-2 d-none d-lg-inline text-gray-600 small"></span>
                   <img
                     class="img-profile rounded-circle"
                     src="assets/undraw_profile.svg"
@@ -340,6 +338,7 @@
     <script src="js/jquery.spapp.js"></script>
     <script src="js/jquery.spapp.min.js"></script>
     <!-- Utils and API helper -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="utils/constants.js"></script>
     <script src="utils/utils.js"></script>
     <script src="utils/rest-client.js"></script>
@@ -358,6 +357,27 @@
     <!-- Chart.js for dashboard example-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+      (function(){
+        function setTopbarName(){
+          RestClient.get('/users/me', function(resp){
+            var u = resp?.data || resp;
+            var name = ((u?.firstName||'') + ' ' + (u?.lastName||'')).trim();
+            if (!name) name = u?.username || '';
+            var el = document.getElementById('topbarUserName');
+            if (el) el.textContent = name || '';
+          }, function(){
+            var token = localStorage.getItem('user_token');
+            var p = Utils.parseJwt(token);
+            var u = p?.user;
+            var name = ((u?.firstName||'') + ' ' + (u?.lastName||'')).trim();
+            if (!name) name = u?.username || '';
+            var el = document.getElementById('topbarUserName');
+            if (el) el.textContent = name || '';
+          });
+        }
+        setTopbarName();
+        try { window.addEventListener('auth:updated', setTopbarName); } catch (e) {}
+      })();
       const ctx1 = document.getElementById("borrowChart").getContext("2d");
       new Chart(ctx1, {
         type: "line",

@@ -20,6 +20,33 @@ Flight::route('GET /users', function () use ($usersService) {
 
 /**
  * @OA\Get(
+ *   path="/users/me",
+ *   tags={"users"},
+ *   summary="Get current user from JWT",
+ *   @OA\Response(response=200, description="OK")
+ * )
+ */
+Flight::route('GET /users/me', function () use ($usersService) {
+    try {
+        Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
+        $userCtx = Flight::get('user');
+        if (!$userCtx || !isset($userCtx->id)) {
+            Flight::halt(401, 'Unauthorized: user context missing');
+            return;
+        }
+        $full = $usersService->getCurrentUserById($userCtx->id);
+        if (!$full) {
+            Flight::json(['success' => false, 'message' => 'User not found'], 404);
+            return;
+        }
+        Flight::json(['success' => true, 'data' => $full], 200);
+    } catch (Throwable $e) {
+        Flight::json(['success' => false, 'message' => 'Failed to fetch current user', 'error' => $e->getMessage()], 400);
+    }
+});
+
+/**
+ * @OA\Get(
  *   path="/users/{id}",
  *   tags={"users"},
  *   summary="Get user by ID",

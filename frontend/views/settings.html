@@ -18,11 +18,8 @@
             height="120"
             alt="User"
           />
-          <h5 class="mb-1" id="userName">John Doe</h5>
-          <p class="text-muted small mb-3" id="userRole">Librarian</p>
-          <button class="btn btn-primary btn-sm" id="changePhotoBtn">
-            <i class="fas fa-upload mr-1"></i> Change Photo
-          </button>
+          <h5 class="mb-1" id="userName"></h5>
+          <p class="text-muted small mb-3" id="userRole"></p>
         </div>
       </div>
     </div>
@@ -37,41 +34,20 @@
           <form id="settingsForm">
             <div class="form-group">
               <label for="fullName">Full Name</label>
-              <input
-                type="text"
-                id="fullName"
-                class="form-control"
-                value="John Doe"
-              />
+              <input type="text" id="fullName" class="form-control" />
             </div>
 
             <div class="form-group">
               <label for="email">Email Address</label>
-              <input
-                type="email"
-                id="email"
-                class="form-control"
-                value="john@example.com"
-              />
+              <input type="email" id="email" class="form-control" />
             </div>
 
             <div class="form-group">
               <label for="role">Role</label>
               <select id="role" class="form-control" disabled>
-                <option>Member</option>
-                <option>Admin</option>
+                <option value="member">Member</option>
+                <option value="admin">Admin</option>
               </select>
-            </div>
-
-            <div class="form-group">
-              <label for="joinDate">Member Since</label>
-              <input
-                type="text"
-                id="joinDate"
-                class="form-control"
-                value="2023-05-14"
-                disabled
-              />
             </div>
 
             <hr />
@@ -120,3 +96,86 @@
     </div>
   </div>
 </div>
+<script>
+  (function () {
+    function setText(id, value) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = value || "";
+    }
+    function setValue(id, value) {
+      var el = document.getElementById(id);
+      if (el) el.value = value || "";
+    }
+    function setDisabled(id, disabled) {
+      var el = document.getElementById(id);
+      if (el) el.disabled = !!disabled;
+    }
+
+    RestClient.get(
+      "/users/me",
+      function (resp) {
+        var user = resp?.data || resp;
+        if (!user) {
+          alert("Failed to load user");
+          return;
+        }
+        var fn = user.firstName || "";
+        var ln = user.lastName || "";
+        var full = (fn + " " + ln).trim() || user.username || "";
+        setValue("fullName", full);
+        setValue("email", user.email || "");
+        setText("userName", full || "");
+        setValue("role", user.role || "");
+        setText(
+          "userRole",
+          (user.role || "").charAt(0).toUpperCase() + (user.role || "").slice(1)
+        );
+        setDisabled("role", true);
+        if (user.role === "admin") {
+          setDisabled("email", false);
+          setDisabled("fullName", false);
+        } else {
+          setDisabled("email", true);
+          setDisabled("fullName", true);
+        }
+      },
+      function () {
+        alert("Unauthorized. Please login again.");
+      }
+    );
+
+    var form = document.getElementById("settingsForm");
+    if (form) {
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var email = document.getElementById("email")?.value || "";
+        var password = document.getElementById("password")?.value || "";
+        var confirm = document.getElementById("confirmPassword")?.value || "";
+        var roleEl = document.getElementById("role");
+        var role = roleEl ? roleEl.value : "";
+        var emailValid = /.+@.+\..+/.test(email);
+        if (!emailValid) {
+          alert("Please enter a valid email");
+          return;
+        }
+        if (password) {
+          if (password.length < 8) {
+            alert("Password must be at least 8 characters");
+            return;
+          }
+          if (password !== confirm) {
+            alert("Passwords do not match");
+            return;
+          }
+        }
+        var roleValid =
+          ["admin", "member"].indexOf((role || "").toLowerCase()) !== -1;
+        if (!roleValid) {
+          alert("Invalid role");
+          return;
+        }
+        alert("Settings validated. Implement server update as needed.");
+      });
+    }
+  })();
+</script>

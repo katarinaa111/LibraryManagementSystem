@@ -20,6 +20,11 @@ class UsersService extends BaseService
         return $this->dao->getUsersByRole($role);
     }
 
+    public function getCurrentUserById($userId)
+    {
+        return $this->dao->getUserById(intval($userId));
+    }
+
     private function validate($entity, $is_update = false)
     {
         $roles = ['admin', 'member'];
@@ -50,6 +55,20 @@ class UsersService extends BaseService
     {
         $this->validate($entity, true);
         return parent::update($entity, $id, $id_column);
+    }
+
+    private function base64url_decode($data)
+    {
+        $remainder = strlen($data) % 4;
+        if ($remainder) {
+            $data .= str_repeat('=', 4 - $remainder);
+        }
+        return base64_decode(strtr($data, '-_', '+/'));
+    }
+
+    private function base64url_decode_raw($data)
+    {
+        return $this->base64url_decode($data);
     }
 }
 

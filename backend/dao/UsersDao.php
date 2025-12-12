@@ -21,5 +21,18 @@ class UserDao extends BaseDao {
         $query = "SELECT * FROM users WHERE role = :role";
         return $this->query($query, ['role' => $role]);
     }
+
+    public function getUserById($id) {
+        $id = intval($id);
+        if ($id <= 0) return null;
+        $stmt = $this->connection->prepare("SELECT id, username, email, firstName, lastName, role FROM users WHERE id = :id");
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $user = $stmt->fetch();
+        if ($user) {
+            return $user;
+        }
+        return null;
+    }
 }
 ?>
