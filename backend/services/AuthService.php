@@ -58,7 +58,7 @@ class AuthService extends BaseService
         $jwt_payload = [
             'user' => $user,
             'iat' => time(),
-            'exp' => time() + (60 * 60 * 24)
+            'exp' => time() + (60 * 60 * 10)
         ];
 
         $token = $this->encodeJwt($jwt_payload, Config::JWT_SECRET());

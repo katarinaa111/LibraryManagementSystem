@@ -1,35 +1,45 @@
 let RestClient = {
   _axios: null,
   _initAxios: function () {
-    if (typeof axios === 'undefined' || RestClient._axios) return;
+    if (typeof axios === "undefined" || RestClient._axios) return;
     RestClient._axios = axios.create({ baseURL: Constants.PROJECT_BASE_URL });
     RestClient._axios.interceptors.request.use(function (config) {
-      const token = localStorage.getItem('user_token');
-      if (token) config.headers['Authentication'] = token;
+      const token = localStorage.getItem("user_token");
+      if (token) config.headers["Authentication"] = token;
       const payload = Utils.parseJwt(token);
-      if (payload && payload.exp && (Date.now() / 1000) >= payload.exp) {
-        localStorage.removeItem('user_token');
-        if (typeof Auth !== 'undefined') Auth.logout();
+      if (payload && payload.exp && Date.now() / 1000 >= payload.exp) {
+        localStorage.removeItem("user_token");
+        if (typeof Auth !== "undefined") Auth.logout();
         return Promise.reject({ response: { status: 401 } });
       }
       return config;
     });
-    RestClient._axios.interceptors.response.use(function (resp) { return resp; }, function (error) {
-      const status = error?.response?.status;
-      if (status === 401 || status === 403) {
-        try { if (typeof Auth !== 'undefined') Auth.logout(); } catch (e) {}
+    RestClient._axios.interceptors.response.use(
+      function (resp) {
+        return resp;
+      },
+      function (error) {
+        const status = error?.response?.status;
+        if (status === 401) {
+          try {
+            if (typeof Auth !== "undefined") Auth.logout();
+          } catch (e) {}
+        }
+        return Promise.reject(error);
       }
-      return Promise.reject(error);
-    });
+    );
   },
   get: function (url, callback, error_callback) {
     RestClient._initAxios();
     if (RestClient._axios) {
-      RestClient._axios.get(url)
-        .then(function (resp) { if (callback) callback(resp.data); })
+      RestClient._axios
+        .get(url)
+        .then(function (resp) {
+          if (callback) callback(resp.data);
+        })
         .catch(function (err) {
           if (error_callback) error_callback(err.response);
-          else alert(err?.response?.data?.message || 'Request failed');
+          else alert(err?.response?.data?.message || "Request failed");
         });
       return;
     }
@@ -47,7 +57,9 @@ let RestClient = {
       },
       error: function (jqXHR) {
         if (jqXHR && (jqXHR.status === 401 || jqXHR.status === 403)) {
-          try { if (typeof Auth !== 'undefined') Auth.logout(); } catch (e) {}
+          try {
+            if (typeof Auth !== "undefined") Auth.logout();
+          } catch (e) {}
         }
         if (error_callback) {
           error_callback(jqXHR);
@@ -65,14 +77,18 @@ let RestClient = {
     RestClient._initAxios();
     if (RestClient._axios) {
       RestClient._axios({ url: url, method: method, data: data || null })
-        .then(function (resp) { if (callback) callback(resp.data); })
+        .then(function (resp) {
+          if (callback) callback(resp.data);
+        })
         .catch(function (err) {
           const jq = err.response;
           if (jq && (jq.status === 401 || jq.status === 403)) {
-            try { if (typeof Auth !== 'undefined') Auth.logout(); } catch (e) {}
+            try {
+              if (typeof Auth !== "undefined") Auth.logout();
+            } catch (e) {}
           }
           if (error_callback) error_callback(jq);
-          else alert(jq?.data?.message || 'Request failed');
+          else alert(jq?.data?.message || "Request failed");
         });
       return;
     }
@@ -94,7 +110,9 @@ let RestClient = {
       })
       .fail(function (jqXHR) {
         if (jqXHR && (jqXHR.status === 401 || jqXHR.status === 403)) {
-          try { if (typeof Auth !== 'undefined') Auth.logout(); } catch (e) {}
+          try {
+            if (typeof Auth !== "undefined") Auth.logout();
+          } catch (e) {}
         }
         if (error_callback) {
           error_callback(jqXHR);

@@ -50,14 +50,6 @@ class AuthMiddleware
         }
     }
 
-    function authorizePermission($permission)
-    {
-        $user = Flight::get('user');
-        if (!in_array($permission, $user->permissions)) {
-            Flight::halt(403, 'Access denied: permission missing');
-        }
-    }
-
     private function base64url_decode($data)
     {
         $remainder = strlen($data) % 4;
