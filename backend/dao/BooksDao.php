@@ -28,5 +28,12 @@ class BooksDao extends BaseDao {
         $query = "SELECT b.*, a.name AS author_name, c.name AS category_name FROM books b LEFT JOIN authors a ON b.author_id = a.id LEFT JOIN categories c ON b.category_id = c.id WHERE b.category_id = :category_id";
         return $this->query($query, ['category_id' => $category_id]);
     }
+
+    public function markBorrowedRecordReturned($borrowed_record_id) {
+        $stmt = $this->connection->prepare("UPDATE borrowedbooks SET returned_date = CURDATE() WHERE id = :id");
+        $stmt->bindValue(':id', intval($borrowed_record_id), PDO::PARAM_INT);
+        $stmt->execute();
+        return ['id' => intval($borrowed_record_id), 'returned_date' => date('Y-m-d')];
+    }
 }
 ?>

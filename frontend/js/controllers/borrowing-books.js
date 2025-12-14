@@ -35,6 +35,7 @@ function renderBorrowedBooks() {
           <td>${member}</td>
           <td>${r.borrowed_date || ""}</td>
           <td>${r.supposed_return_date || ""}</td>
+          <td>${r.returned_date || ""}</td>
           <td>
             <span class="badge ${
               status === "Returned" ? "bg-success" : "bg-warning text-dark"
@@ -102,8 +103,7 @@ function renderBorrowedBooks() {
       return;
     }
     const id = $(this).data("id");
-    const payload = { returned_date: new Date().toISOString().split("T")[0] };
-    RestClient.put(`/borrowedbooks/${id}`, payload, function () {
+    RestClient.patch(`/borrowedbooks/${id}/return`, null, function () {
       loadAll();
     });
   });
