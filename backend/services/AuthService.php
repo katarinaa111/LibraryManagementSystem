@@ -47,11 +47,11 @@ class AuthService extends BaseService
 
         $user = $this->auth_dao->get_user_by_email($entity['email']);
         if (!$user) {
-            return ['success' => false, 'error' => 'Invalid username or password.'];
+            return ['success' => false, 'error' => 'Invalid email or password.'];
         }
 
         if (!$user || !password_verify($entity['password'], $user['password']))
-            return ['success' => false, 'error' => 'Invalid username or password.'];
+            return ['success' => false, 'error' => 'Invalid email or password.'];
 
         unset($user['password']);
 
