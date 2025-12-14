@@ -1,0 +1,65 @@
+<div class="container-fluid py-3">
+  <h2 class="mb-4"><i class="fas fa-user-edit"></i> Authors Management</h2>
+  <div class="row mb-3">
+    <div class="col-md-8 mb-2">
+      <input
+        type="text"
+        id="searchAuthor"
+        class="form-control"
+        placeholder="Search authors by name"
+      />
+    </div>
+    <div class="col-md-4 text-end mb-2">
+      <button class="btn btn-primary w-100" id="addAuthorBtn">➕ Add Author</button>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover" id="authorsTable">
+      <thead class="table-light">
+        <tr>
+          <th>Name</th>
+          <th>Bio</th>
+          <th style="width: 120px">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="authorsTableBody"></tbody>
+    </table>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="authorModal"
+  tabindex="-1"
+  aria-labelledby="authorModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="authorModalLabel">Add Author</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="authorForm">
+          <input type="hidden" id="authorId" />
+          <div class="mb-3">
+            <label>Name</label>
+            <input type="text" id="authorName" class="form-control" required />
+          </div>
+          <div class="mb-3">
+            <label>Bio</label>
+            <textarea id="authorBio" class="form-control" rows="4"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button type="submit" form="authorForm" class="btn btn-primary">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

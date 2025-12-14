@@ -18,6 +18,26 @@ app.route({
 });
 
 app.route({
+  view: "authors",
+  load: "authors.html",
+  onCreate: function () {
+    if (!guard()) return;
+    renderAuthors();
+  },
+  onReady: function () {},
+});
+
+app.route({
+  view: "categories",
+  load: "categories.html",
+  onCreate: function () {
+    if (!guard()) return;
+    renderCategories();
+  },
+  onReady: function () {},
+});
+
+app.route({
   view: "members",
   load: "members.html",
   onCreate: function () {

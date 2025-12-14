@@ -68,6 +68,18 @@
             <span>Books</span>
           </a>
         </li>
+        <li class="nav-item" id="menuAuthors">
+          <a class="nav-link collapsed" href="#authors" aria-expanded="true">
+            <i class="fas fa-fw fa-user-edit"></i>
+            <span>Authors</span>
+          </a>
+        </li>
+        <li class="nav-item" id="menuCategories">
+          <a class="nav-link collapsed" href="#categories" aria-expanded="true">
+            <i class="fas fa-fw fa-tags"></i>
+            <span>Categories</span>
+          </a>
+        </li>
         <li class="nav-item" id="menuMembers">
           <a class="nav-link collapsed" href="#members" aria-expanded="true">
             <i class="fas fa-fw fa-user"></i>
@@ -258,6 +270,8 @@
           <main id="spapp" role="main">
             <section id="dashboard" data-load="dashboard.html"></section>
             <section id="books" data-load="books.html"></section>
+            <section id="authors" data-load="authors.html"></section>
+            <section id="categories" data-load="categories.html"></section>
             <section id="borrowing" data-load="borrowing-books.html"></section>
             <section id="members" data-load="members.html"></section>
             <section id="settings" data-load="settings.html"></section>
@@ -348,6 +362,8 @@
     <script src="js/bootstrap.js"></script>
     <!-- Import controllers -->
     <script src="js/controllers/books.js"></script>
+    <script src="js/controllers/authors.js"></script>
+    <script src="js/controllers/categories.js"></script>
     <script src="js/controllers/members.js"></script>
     <script src="js/controllers/borrowing-books.js"></script>
 

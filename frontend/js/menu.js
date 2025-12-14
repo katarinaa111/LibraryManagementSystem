@@ -5,6 +5,8 @@ var Menu = {
       dashboard: true,
       borrowing: true,
       books: true,
+      authors: true,
+      categories: true,
       members: true,
       settings: true,
     },
@@ -12,6 +14,8 @@ var Menu = {
       dashboard: true,
       borrowing: true,
       books: true,
+      authors: true,
+      categories: true,
       members: false,
       settings: true,
     },
@@ -49,6 +53,8 @@ var Menu = {
       }
       show("menuBorrowing", !!cfg.borrowing);
       show("menuBooks", !!cfg.books);
+      show("menuAuthors", !!cfg.authors);
+      show("menuCategories", !!cfg.categories);
       show("menuMembers", !!cfg.members);
       show("menuSettings", !!cfg.settings);
       show("menuDashboard", !!cfg.dashboard);
