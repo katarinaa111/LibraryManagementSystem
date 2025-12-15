@@ -184,6 +184,9 @@ ALTER TABLE `books`
 ALTER TABLE `borrowedbooks`
   ADD CONSTRAINT `FK_borrowedbooks_books` FOREIGN KEY (`book_id`) REFERENCES `books` (`id`),
   ADD CONSTRAINT `FK_borrowedbooks_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+INSERT INTO `users` (`username`, `email`, `firstName`, `lastName`, `password`, `role`, `created_at`)
+SELECT 'admin', 'admin@example.com', 'System', 'Admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9/ITjie1Y9QfQ3Yj7o9eG.', 'admin', CURDATE()
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM `users` WHERE `email` = 'admin@example.com');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

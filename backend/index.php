@@ -22,5 +22,21 @@ require_once __DIR__ . '/services/UsersService.php';
 Flight::register('usersService', 'UsersService');
 require_once __DIR__ . '/routes/users.php';
 
+require_once __DIR__ . '/services/AuthService.php';
+Flight::register('authService', 'AuthService');
+require_once __DIR__ . '/routes/auth.php';
+
+require_once __DIR__ . '/middleware/AuthMiddleware.php';
+Flight::register('auth_middleware', "AuthMiddleware");
+
+Flight::before('start', function () {
+    $url = Flight::request()->url;
+    if (strpos($url, '/auth/login') === 0 || strpos($url, '/auth/register') === 0) {
+        return;
+    }
+    $token = Flight::request()->getHeader("Authentication");
+    Flight::auth_middleware()->verifyToken($token);
+});
+
 Flight::start();  //start FlightPHP
 ?>

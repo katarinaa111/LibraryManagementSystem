@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../services/UsersService.php';
+require_once __DIR__ . '/../data/Roles.php';
 
 $usersService = new UsersService();
 
@@ -13,7 +14,35 @@ $usersService = new UsersService();
  * )
  */
 Flight::route('GET /users', function () use ($usersService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($usersService->get_all());
+});
+
+/**
+ * @OA\Get(
+ *   path="/users/me",
+ *   tags={"users"},
+ *   summary="Get current user from JWT",
+ *   @OA\Response(response=200, description="OK")
+ * )
+ */
+Flight::route('GET /users/me', function () use ($usersService) {
+    try {
+        Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
+        $userCtx = Flight::get('user');
+        if (!$userCtx || !isset($userCtx->id)) {
+            Flight::halt(401, 'Unauthorized: user context missing');
+            return;
+        }
+        $full = $usersService->getCurrentUserById($userCtx->id);
+        if (!$full) {
+            Flight::json(['success' => false, 'message' => 'User not found'], 404);
+            return;
+        }
+        Flight::json(['success' => true, 'data' => $full], 200);
+    } catch (Throwable $e) {
+        Flight::json(['success' => false, 'message' => 'Failed to fetch current user', 'error' => $e->getMessage()], 400);
+    }
 });
 
 /**
@@ -26,6 +55,7 @@ Flight::route('GET /users', function () use ($usersService) {
  * )
  */
 Flight::route('GET /users/@id', function ($id) use ($usersService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($usersService->get_by_id($id));
 });
 
@@ -50,6 +80,7 @@ Flight::route('GET /users/@id', function ($id) use ($usersService) {
  * )
  */
 Flight::route('POST /users', function () use ($usersService) {
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = json_decode(Flight::request()->getBody(), true);
     try {
         Flight::json($usersService->add($data), 200);
@@ -80,6 +111,7 @@ Flight::route('POST /users', function () use ($usersService) {
  * )
  */
 Flight::route('PUT /users/@id', function ($id) use ($usersService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     $data = json_decode(Flight::request()->getBody(), true);
     try {
         Flight::json($usersService->update($data, $id));
@@ -98,6 +130,7 @@ Flight::route('PUT /users/@id', function ($id) use ($usersService) {
  * )
  */
 Flight::route('DELETE /users/@id', function ($id) use ($usersService) {
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(['success' => $usersService->delete($id)]);
 });
 
@@ -111,6 +144,7 @@ Flight::route('DELETE /users/@id', function ($id) use ($usersService) {
  * )
  */
 Flight::route('GET /users/by-email', function () use ($usersService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     $email = Flight::request()->query->email;
     Flight::json($usersService->get_by_email($email));
 });
@@ -125,6 +159,7 @@ Flight::route('GET /users/by-email', function () use ($usersService) {
  * )
  */
 Flight::route('GET /users/by-role/@role', function ($role) use ($usersService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($usersService->get_users_by_role($role));
 });
 

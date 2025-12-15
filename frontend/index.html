@@ -40,6 +40,7 @@
         <a
           class="sidebar-brand d-flex align-items-center justify-content-center"
           href="#dashboard"
+          id="menuDashboard"
         >
           <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-book"></i>
@@ -47,7 +48,7 @@
           <div class="sidebar-brand-text mx-3">Library SPA</div>
         </a>
         <hr class="sidebar-divider my-0" />
-        <li class="nav-item active">
+        <li class="nav-item active" id="menuDashboardItem">
           <a class="nav-link" href="#dashboard">
             <i class="fas fa-fw fa-bookmark"></i>
             <span>Dashboard</span></a
@@ -55,19 +56,31 @@
         </li>
         <hr class="sidebar-divider" />
         <div class="sidebar-heading">Library</div>
-        <li class="nav-item">
+        <li class="nav-item" id="menuBorrowing">
           <a class="nav-link collapsed" href="#borrowing" aria-expanded="true">
             <i class="fas fa-fw fa-book-open"></i>
             <span>Borrowing Books</span>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" id="menuBooks">
           <a class="nav-link collapsed" href="#books" aria-expanded="true">
             <i class="fas fa-fw fa-book"></i>
             <span>Books</span>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" id="menuAuthors">
+          <a class="nav-link collapsed" href="#authors" aria-expanded="true">
+            <i class="fas fa-fw fa-user-edit"></i>
+            <span>Authors</span>
+          </a>
+        </li>
+        <li class="nav-item" id="menuCategories">
+          <a class="nav-link collapsed" href="#categories" aria-expanded="true">
+            <i class="fas fa-fw fa-tags"></i>
+            <span>Categories</span>
+          </a>
+        </li>
+        <li class="nav-item" id="menuMembers">
           <a class="nav-link collapsed" href="#members" aria-expanded="true">
             <i class="fas fa-fw fa-user"></i>
             <span>Members</span>
@@ -75,7 +88,7 @@
         </li>
         <hr class="sidebar-divider" />
         <div class="sidebar-heading">User</div>
-        <li class="nav-item">
+        <li class="nav-item" id="menuSettings">
           <a class="nav-link collapsed" href="#settings" aria-expanded="true">
             <i class="fas fa-fw fa-cogs"></i>
             <span>Settings</span>
@@ -224,9 +237,7 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  <span class="mr-2 d-none d-lg-inline text-gray-600 small"
-                    >John Doe</span
-                  >
+                  <span id="topbarUserName" class="mr-2 d-none d-lg-inline text-gray-600 small"></span>
                   <img
                     class="img-profile rounded-circle"
                     src="assets/undraw_profile.svg"
@@ -259,11 +270,12 @@
           <main id="spapp" role="main">
             <section id="dashboard" data-load="dashboard.html"></section>
             <section id="books" data-load="books.html"></section>
+            <section id="authors" data-load="authors.html"></section>
+            <section id="categories" data-load="categories.html"></section>
             <section id="borrowing" data-load="borrowing-books.html"></section>
             <section id="members" data-load="members.html"></section>
             <section id="settings" data-load="settings.html"></section>
-            <section id="login" data-load="login.html"></section>
-            <section id="register" data-load="register.html"></section>
+            
           </main>
         </div>
         <!-- End of Main Content -->
@@ -321,7 +333,7 @@
               class="btn btn-primary"
               type="button"
               data-dismiss="modal"
-              onclick="location.hash='#login'"
+              onclick="Auth.logout()"
             >
               Logout
             </button>
@@ -339,8 +351,19 @@
     <!-- SPA plugin -->
     <script src="js/jquery.spapp.js"></script>
     <script src="js/jquery.spapp.min.js"></script>
+    <!-- Utils and API helper -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="utils/constants.js"></script>
+    <script src="utils/utils.js"></script>
+    <script src="utils/rest-client.js"></script>
+    <!-- Auth utilities -->
+    <script src="js/auth.js"></script>
+    <script src="js/menu.js"></script>
+    <script src="js/bootstrap.js"></script>
     <!-- Import controllers -->
     <script src="js/controllers/books.js"></script>
+    <script src="js/controllers/authors.js"></script>
+    <script src="js/controllers/categories.js"></script>
     <script src="js/controllers/members.js"></script>
     <script src="js/controllers/borrowing-books.js"></script>
 
@@ -350,6 +373,27 @@
     <!-- Chart.js for dashboard example-->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+      (function(){
+        function setTopbarName(){
+          RestClient.get('/users/me', function(resp){
+            var u = resp?.data || resp;
+            var name = ((u?.firstName||'') + ' ' + (u?.lastName||'')).trim();
+            if (!name) name = u?.username || '';
+            var el = document.getElementById('topbarUserName');
+            if (el) el.textContent = name || '';
+          }, function(){
+            var token = localStorage.getItem('user_token');
+            var p = Utils.parseJwt(token);
+            var u = p?.user;
+            var name = ((u?.firstName||'') + ' ' + (u?.lastName||'')).trim();
+            if (!name) name = u?.username || '';
+            var el = document.getElementById('topbarUserName');
+            if (el) el.textContent = name || '';
+          });
+        }
+        setTopbarName();
+        try { window.addEventListener('auth:updated', setTopbarName); } catch (e) {}
+      })();
       const ctx1 = document.getElementById("borrowChart").getContext("2d");
       new Chart(ctx1, {
         type: "line",
@@ -389,13 +433,7 @@
           const name = document.getElementById("fullName").value;
           const email = document.getElementById("email").value;
 
-          alert(`✅ Settings updated for ${name} (${email})`);
-        });
-
-      document
-        .getElementById("changePhotoBtn")
-        .addEventListener("click", () => {
-          alert("Feature coming soon: upload a new profile photo!");
+          alert(`Settings updated for ${name} (${email})`);
         });
     </script>
   </body>

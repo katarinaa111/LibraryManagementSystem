@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../services/AuthorsService.php';
+require_once __DIR__ . '/../data/Roles.php';
 
 $authorsService = new AuthorsService();
 
@@ -13,6 +14,7 @@ $authorsService = new AuthorsService();
  * )
  */
 Flight::route('GET /authors', function () use ($authorsService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($authorsService->get_all());
 });
 
@@ -26,6 +28,7 @@ Flight::route('GET /authors', function () use ($authorsService) {
  * )
  */
 Flight::route('GET /authors/@id', function ($id) use ($authorsService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($authorsService->get_by_id($id));
 });
 
@@ -49,6 +52,7 @@ Flight::route('GET /authors/@id', function ($id) use ($authorsService) {
  * )
  */
 Flight::route('POST /authors', function () use ($authorsService) {
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = json_decode(Flight::request()->getBody(), true);
     try {
         Flight::json($authorsService->add($data), 200);
@@ -78,6 +82,7 @@ Flight::route('POST /authors', function () use ($authorsService) {
  * )
  */
 Flight::route('PUT /authors/@id', function ($id) use ($authorsService) {
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = json_decode(Flight::request()->getBody(), true);
     try {
         Flight::json($authorsService->update($data, $id));
@@ -96,6 +101,7 @@ Flight::route('PUT /authors/@id', function ($id) use ($authorsService) {
  * )
  */
 Flight::route('DELETE /authors/@id', function ($id) use ($authorsService) {
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(['success' => $authorsService->delete($id)]);
 });
 
@@ -109,6 +115,7 @@ Flight::route('DELETE /authors/@id', function ($id) use ($authorsService) {
  * )
  */
 Flight::route('GET /authors/search', function () use ($authorsService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     $name = Flight::request()->query->getData()['name'];
     Flight::json($authorsService->get_author_by_name($name));
 });

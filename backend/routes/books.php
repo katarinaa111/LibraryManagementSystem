@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../services/BooksService.php';
+require_once __DIR__ . '/../data/Roles.php';
 
 $booksService = new BooksService();
 
@@ -13,6 +14,7 @@ $booksService = new BooksService();
  * )
  */
 Flight::route('GET /books', function () use ($booksService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($booksService->get_all());
 });
 
@@ -26,6 +28,7 @@ Flight::route('GET /books', function () use ($booksService) {
  * )
  */
 Flight::route('GET /books/@id', function ($id) use ($booksService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($booksService->get_by_id($id));
 });
 
@@ -52,6 +55,7 @@ Flight::route('GET /books/@id', function ($id) use ($booksService) {
  * )
  */
 Flight::route('POST /books', function () use ($booksService) {
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = json_decode(Flight::request()->getBody(), true);
     try {
         Flight::json($booksService->add($data), 200);
@@ -82,6 +86,7 @@ Flight::route('POST /books', function () use ($booksService) {
  * )
  */
 Flight::route('PUT /books/@id', function ($id) use ($booksService) {
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     $data = json_decode(Flight::request()->getBody(), true);
     try {
         Flight::json($booksService->update($data, $id));
@@ -100,6 +105,7 @@ Flight::route('PUT /books/@id', function ($id) use ($booksService) {
  * )
  */
 Flight::route('DELETE /books/@id', function ($id) use ($booksService) {
+    Flight::auth_middleware()->authorizeRole(Roles::ADMIN);
     Flight::json(['success' => $booksService->delete($id)]);
 });
 
@@ -113,6 +119,7 @@ Flight::route('DELETE /books/@id', function ($id) use ($booksService) {
  * )
  */
 Flight::route('GET /books/by-author/@author_id', function ($author_id) use ($booksService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($booksService->get_books_by_author_id($author_id));
 });
 
@@ -126,6 +133,7 @@ Flight::route('GET /books/by-author/@author_id', function ($author_id) use ($boo
  * )
  */
 Flight::route('GET /books/by-category/@category_id', function ($category_id) use ($booksService) {
+    Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($booksService->get_books_by_category_id($category_id));
 });
 

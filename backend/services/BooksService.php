@@ -53,6 +53,15 @@ class BooksService extends BaseService
         $this->validate($entity);
         return parent::update($entity, $id, $id_column);
     }
+
+    public function return_book($borrowed_record_id)
+    {
+        $borrowed_record_id = intval($borrowed_record_id);
+        if ($borrowed_record_id <= 0) {
+            throw new InvalidArgumentException('invalid borrowed record id');
+        }
+        return $this->dao->markBorrowedRecordReturned($borrowed_record_id);
+    }
 }
 
 ?>
