@@ -63,23 +63,23 @@
           <input type="hidden" id="bookId" />
           <div class="mb-3">
             <label>Title</label>
-            <input type="text" id="bookTitle" class="form-control" required />
+            <input type="text" id="bookTitle" name="title" class="form-control" required />
           </div>
           <div class="mb-3">
             <label>Author</label>
-            <select id="bookAuthorId" class="form-control" required>
+            <select id="bookAuthorId" name="author_id" class="form-control" required>
               <option value="">Select author...</option>
             </select>
           </div>
           <div class="mb-3">
             <label>Category</label>
-            <select id="bookCategoryId" class="form-control" required>
+            <select id="bookCategoryId" name="category_id" class="form-control" required>
               <option value="">Select category...</option>
             </select>
           </div>
           <div class="mb-3">
             <label>Status</label>
-            <select id="bookStatus" class="form-control">
+            <select id="bookStatus" name="status" class="form-control">
               <option>Available</option>
               <option>Borrowed</option>
             </select>

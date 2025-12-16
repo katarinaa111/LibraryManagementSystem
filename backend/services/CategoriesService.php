@@ -25,6 +25,7 @@ class CategoriesService extends BaseService
     public function add($entity)
     {
         $this->validate($entity);
+        $entity['created_at'] = date('Y-m-d');
         return parent::add($entity);
     }
 
@@ -34,5 +35,3 @@ class CategoriesService extends BaseService
         return parent::update($entity, $id, $id_column);
     }
 }
-
-?>
