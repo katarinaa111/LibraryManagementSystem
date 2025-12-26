@@ -5,7 +5,7 @@ require __DIR__ . '/../../../vendor/autoload.php';
 if ($_SERVER['SERVER_NAME'] == 'localhost' || $_SERVER['SERVER_NAME'] == '127.0.0.1') {
     define('BASE_URL', 'http://localhost/KatarinaSoja/LibraryManagementSystem/backend');
 } else {
-    define('BASE_URL', 'https://add-production-server-after-deployment/backend/');
+    define('BASE_URL', 'https://library-db-katarina-soja-backend-kug26.ondigitalocean.app/');
 }
 $openapi = \OpenApi\Generator::scan([
     __DIR__ . '/doc_setup.php',
@@ -13,4 +13,3 @@ $openapi = \OpenApi\Generator::scan([
 ]);
 header('Content-Type: application/json');
 echo $openapi->toJson();
-?>
