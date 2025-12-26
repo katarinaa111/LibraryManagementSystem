@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @OA\Info(
  *     title="API",
@@ -12,7 +13,7 @@
  */
 /**
  * @OA\Server(
- *     url= "http://localhost/KatarinaSoja/LibraryManagementSystem/backend",
+ *     url= "https://library-db-katarina-soja-backend-kug26.ondigitalocean.app",
  *     description="API server"
  * )
  */
