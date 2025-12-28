@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../services/CategoriesService.php';
-require_once __DIR__ . '/../data/Roles.php';
+require_once __DIR__ . '/../data/roles.php';
 
 $categoriesService = new CategoriesService();
 
@@ -117,5 +117,3 @@ Flight::route('GET /categories/search', function () use ($categoriesService) {
     $name = Flight::request()->query->name;
     Flight::json($categoriesService->get_category_by_name($name));
 });
-
-?>

@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../services/BorrowedBooksService.php';
 require_once __DIR__ . '/../services/BooksService.php';
-require_once __DIR__ . '/../data/Roles.php';
+require_once __DIR__ . '/../data/roles.php';
 
 $borrowedBooksService = new BorrowedBooksService();
 $booksService = new BooksService();
@@ -160,5 +160,3 @@ Flight::route('PATCH /borrowedbooks/@id/return', function ($id) use ($booksServi
         Flight::json(['success' => false, 'error' => $e->getMessage()], 400);
     }
 });
-
-?>

@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../services/UsersService.php';
-require_once __DIR__ . '/../data/Roles.php';
+require_once __DIR__ . '/../data/roles.php';
 
 $usersService = new UsersService();
 
@@ -162,5 +162,3 @@ Flight::route('GET /users/by-role/@role', function ($role) use ($usersService) {
     Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($usersService->get_users_by_role($role));
 });
-
-?>

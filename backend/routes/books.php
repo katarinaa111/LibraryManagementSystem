@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../services/BooksService.php';
-require_once __DIR__ . '/../data/Roles.php';
+require_once __DIR__ . '/../data/roles.php';
 
 $booksService = new BooksService();
 
@@ -136,5 +136,3 @@ Flight::route('GET /books/by-category/@category_id', function ($category_id) use
     Flight::auth_middleware()->authorizeRoles([Roles::ADMIN, Roles::MEMBER]);
     Flight::json($booksService->get_books_by_category_id($category_id));
 });
-
-?>

@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../services/AuthorsService.php';
-require_once __DIR__ . '/../data/Roles.php';
+require_once __DIR__ . '/../data/roles.php';
 
 $authorsService = new AuthorsService();
 
@@ -119,5 +119,3 @@ Flight::route('GET /authors/search', function () use ($authorsService) {
     $name = Flight::request()->query->getData()['name'];
     Flight::json($authorsService->get_author_by_name($name));
 });
-
-?>
