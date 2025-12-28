@@ -56,25 +56,62 @@ function renderMembers() {
     });
   });
 
-  $("#memberForm").submit(function (e) {
-    e.preventDefault();
-    const id = $("#memberId").val();
-    const payload = {
-      username: $("#memberName").val(),
-      email: $("#memberEmail").val(),
-      role: normalizeRole($("#memberRole").val()),
-    };
-    if (id) {
-      RestClient.put(`/users/${id}`, payload, function () {
+  const validator = $("#memberForm").validate({
+    rules: {
+      name: {
+        required: true,
+        minlength: 2,
+      },
+      email: {
+        required: true,
+        email: true,
+      },
+      role: "required",
+      join_date: "required",
+    },
+    messages: {
+      name: {
+        required: "Please enter member name",
+        minlength: "Name must be at least 2 characters",
+      },
+      email: "Please enter a valid email address",
+      role: "Please select a role",
+      join_date: "Please select a join date",
+    },
+    submitHandler: function (form) {
+      const id = $("#memberId").val();
+      const payload = {
+        username: $("#memberName").val(),
+        email: $("#memberEmail").val(),
+        role: normalizeRole($("#memberRole").val()),
+        joinDate: $("#memberJoinDate").val(),
+      };
+
+      $.blockUI({ message: '<h3>Processing...</h3>' });
+
+      const success = function () {
+        $.unblockUI();
         $("#memberModal").modal("hide");
         loadUsers();
-      });
-    } else {
-      RestClient.post(`/users`, payload, function () {
-        $("#memberModal").modal("hide");
-        loadUsers();
-      });
-    }
+      };
+
+      const error = function (err) {
+        $.unblockUI();
+        alert(err?.data?.message || "Error saving member");
+      };
+
+      if (id) {
+        RestClient.put(`/users/${id}`, payload, success, error);
+      } else {
+        RestClient.post(`/users`, payload, success, error);
+      }
+    },
+  });
+
+  // Reset validation when modal is hidden
+  $("#memberModal").on("hidden.bs.modal", function () {
+    validator.resetForm();
+    $(".error").removeClass("error");
   });
 
   function normalizeRole(viewRole) {

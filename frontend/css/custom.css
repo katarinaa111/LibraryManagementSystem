@@ -1,0 +1,20 @@
+/* Custom styles for jQuery Validation Plugin */
+label.error {
+    color: #e74a3b;
+    /* Bootstrap danger color */
+    font-size: 0.85rem;
+    /* Smaller font size */
+    margin-top: 5px;
+    display: block;
+    /* Ensure it appears on a new line */
+    font-weight: 400;
+}
+
+/* Highlight the input field when there is an error */
+input.error,
+select.error,
+textarea.error {
+    border-color: #e74a3b;
+}
+
+/* Optional: Fix for blockUI overlay z-index if needed, though usually it's fine */

@@ -84,28 +84,58 @@ function renderAuthors() {
   });
 
   // Submit add/update form (admin only): POST/PUT /authors
-  $("#authorForm").submit(function (e) {
-    e.preventDefault();
-    if (!isAdmin) return;
-    const id = $("#authorId").val();
-    const name = ($("#authorName").val() || "").trim();
-    const bio = ($("#authorBio").val() || "").trim();
-    if (!name) {
-      alert("Name is required");
-      return;
-    }
-    const payload = { name, bio };
-    if (id) {
-      RestClient.put(`/authors/${id}`, payload, function () {
+  const validator = $("#authorForm").validate({
+    rules: {
+      name: {
+        required: true,
+        minlength: 2,
+      },
+      bio: {
+        maxlength: 500,
+      },
+    },
+    messages: {
+      name: {
+        required: "Please enter the author's name",
+        minlength: "Name must be at least 2 characters long",
+      },
+      bio: {
+        maxlength: "Bio cannot exceed 500 characters",
+      },
+    },
+    submitHandler: function (form) {
+      if (!isAdmin) return;
+      const id = $("#authorId").val();
+      const name = ($("#authorName").val() || "").trim();
+      const bio = ($("#authorBio").val() || "").trim();
+      
+      const payload = { name, bio };
+
+      $.blockUI({ message: '<h3>Processing...</h3>' });
+
+      const success = function () {
+        $.unblockUI();
         $("#authorModal").modal("hide");
         loadAuthors();
-      });
-    } else {
-      RestClient.post(`/authors`, payload, function () {
-        $("#authorModal").modal("hide");
-        loadAuthors();
-      });
-    }
+      };
+
+      const error = function (err) {
+        $.unblockUI();
+        alert(err?.data?.message || "Error saving author");
+      };
+
+      if (id) {
+        RestClient.put(`/authors/${id}`, payload, success, error);
+      } else {
+        RestClient.post(`/authors`, payload, success, error);
+      }
+    },
+  });
+
+  // Reset validation when modal is hidden
+  $("#authorModal").on("hidden.bs.modal", function () {
+    validator.resetForm();
+    $(".error").removeClass("error"); // Manually remove error class from inputs if resetForm doesn't
   });
 
   loadAuthors();

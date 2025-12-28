@@ -19,12 +19,11 @@ function renderCategories() {
           <td>${c.name || ""}</td>
           <td>${desc}</td>
           <td>
-            ${
-              isAdmin
-                ? `<button class="btn btn-sm btn-warning editCategory" data-id="${c.id}">Edit</button>
+            ${isAdmin
+          ? `<button class="btn btn-sm btn-warning editCategory" data-id="${c.id}">Edit</button>
             <button class="btn btn-sm btn-danger deleteCategory" data-id="${c.id}">Delete</button>`
-                : ``
-            }
+          : ``
+        }
           </td>
         </tr>`;
     });
@@ -84,28 +83,58 @@ function renderCategories() {
   });
 
   // Submit add/update form (admin only): POST/PUT /categories
-  $("#categoryForm").submit(function (e) {
-    e.preventDefault();
-    if (!isAdmin) return;
-    const id = $("#categoryId").val();
-    const name = ($("#categoryName").val() || "").trim();
-    const description = ($("#categoryDescription").val() || "").trim();
-    if (!name) {
-      alert("Name is required");
-      return;
-    }
-    const payload = { name, description };
-    if (id) {
-      RestClient.put(`/categories/${id}`, payload, function () {
+  const validator = $("#categoryForm").validate({
+    rules: {
+      name: {
+        required: true,
+        minlength: 2,
+      },
+      description: {
+        maxlength: 500,
+      },
+    },
+    messages: {
+      name: {
+        required: "Please enter the category name",
+        minlength: "Name must be at least 2 characters long",
+      },
+      description: {
+        maxlength: "Description cannot exceed 500 characters",
+      },
+    },
+    submitHandler: function (form) {
+      if (!isAdmin) return;
+      const id = $("#categoryId").val();
+      const name = ($("#categoryName").val() || "").trim();
+      const description = ($("#categoryDescription").val() || "").trim();
+      
+      const payload = { name, description };
+
+      $.blockUI({ message: '<h3>Processing...</h3>' });
+
+      const success = function () {
+        $.unblockUI();
         $("#categoryModal").modal("hide");
         loadCategories();
-      });
-    } else {
-      RestClient.post(`/categories`, payload, function () {
-        $("#categoryModal").modal("hide");
-        loadCategories();
-      });
-    }
+      };
+
+      const error = function (err) {
+        $.unblockUI();
+        alert(err?.data?.message || "Error saving category");
+      };
+
+      if (id) {
+        RestClient.put(`/categories/${id}`, payload, success, error);
+      } else {
+        RestClient.post(`/categories`, payload, success, error);
+      }
+    },
+  });
+
+  // Reset validation when modal is hidden
+  $("#categoryModal").on("hidden.bs.modal", function () {
+    validator.resetForm();
+    $(".error").removeClass("error");
   });
 
   loadCategories();
@@ -114,6 +143,6 @@ function renderCategories() {
     try {
       $("#addCategoryBtn").hide();
       $("#categoriesTable thead th:last").hide();
-    } catch (e) {}
+    } catch (e) { }
   }
 }

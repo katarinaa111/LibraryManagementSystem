@@ -15,12 +15,11 @@ function renderBooks() {
           <td>${b.category?.name || b.category_name || ""}</td>
           <td>${b.status || ""}</td>
           <td>
-            ${
-              isAdmin
-                ? `<button class="btn btn-sm btn-warning editBook" data-id="${b.id}">Edit</button>
+            ${isAdmin
+          ? `<button class="btn btn-sm btn-warning editBook" data-id="${b.id}">Edit</button>
             <button class="btn btn-sm btn-danger deleteBook" data-id="${b.id}">Delete</button>`
-                : ``
-            }
+          : ``
+        }
           </td>
         </tr>`;
     });
@@ -96,24 +95,52 @@ function renderBooks() {
     });
   };
 
-  $("#bookForm").submit(function (e) {
-    e.preventDefault();
-    const id = $("#bookId").val();
-    const title = $("#bookTitle").val();
-    const author_id = parseInt($("#bookAuthorId").val());
-    const category_id = parseInt($("#bookCategoryId").val());
-    const payload = { title, author_id, category_id };
-    if (id) {
-      RestClient.put(`/books/${id}`, payload, function () {
+  const validator = $("#bookForm").validate({
+    rules: {
+      title: "required",
+      author_id: "required",
+      category_id: "required",
+      status: "required",
+    },
+    messages: {
+      title: "Please enter book title",
+      author_id: "Please select an author",
+      category_id: "Please select a category",
+      status: "Please select status",
+    },
+    submitHandler: function (form) {
+      const id = $("#bookId").val();
+      const title = $("#bookTitle").val();
+      const author_id = parseInt($("#bookAuthorId").val());
+      const category_id = parseInt($("#bookCategoryId").val());
+      const status = $("#bookStatus").val();
+      const payload = { title, author_id, category_id };
+
+      $.blockUI({ message: '<h3>Processing...</h3>' });
+
+      const success = function () {
+        $.unblockUI();
         $("#bookModal").modal("hide");
         loadBooks();
-      });
-    } else {
-      RestClient.post(`/books`, payload, function () {
-        $("#bookModal").modal("hide");
-        loadBooks();
-      });
-    }
+      };
+
+      const error = function (err) {
+        $.unblockUI();
+        alert(err?.data?.message || "Error saving book");
+      };
+
+      if (id) {
+        RestClient.put(`/books/${id}`, payload, success, error);
+      } else {
+        RestClient.post(`/books`, payload, success, error);
+      }
+    },
+  });
+
+  // Reset validation when modal is hidden
+  $("#bookModal").on("hidden.bs.modal", function () {
+    validator.resetForm();
+    $(".error").removeClass("error");
   });
 
   loadBooks();
@@ -123,6 +150,6 @@ function renderBooks() {
     try {
       $("#addBookBtn").hide();
       $("#booksTable thead th:last").hide();
-    } catch (e) {}
+    } catch (e) { }
   }
 }
